@@ -33,6 +33,8 @@ import com.google.android.exoplayer2.util.Util;
 
 import static android.view.View.GONE;
 
+import static com.example.videolist.MainActivity.LASTPOSITION;
+
 public class ItemViewHolder extends RecyclerView.ViewHolder {
 
     SimpleExoPlayer exoPlayer;
@@ -58,133 +60,25 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public void bindData(String url, int position) {
 
 
-//        root.setOnClickListener(view -> {
-//
-//            exoPlayer = ExoPlayerFactory.newSimpleInstance(itemView.getContext());
-//
-//
-//            HttpProxyCacheServer proxyServer = new HttpProxyCacheServer.Builder(itemView.getContext()).maxCacheSize(1024 * 1024 * 1024).build();
-//            String proxyURL = proxyServer.getProxyUrl(url);
-//
-//            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(itemView.getContext(),
-//                    Util.getUserAgent(itemView.getContext(), itemView.getContext().getPackageName()));
-//
-////            playerView.setPlayer(exoPlayer);
-////            playerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
-////        playerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT);
-//
-//            exoPlayer.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory)
-//                    .createMediaSource(Uri.parse(proxyURL)));
-//
-//
-//            playerView.setPlayer(exoPlayer);
-//            playerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT);
-//            exoPlayer.setPlayWhenReady(true);
-////            exoPlayer.getPlaybackState();  to start video again while finished
-//
-//
-//            exoPlayer.addListener(new Player.EventListener() {
-//                @Override
-//                public void onTimelineChanged(Timeline timeline, @Nullable Object manifest, int reason) {
-//
-//                }
-//
-//                @Override
-//                public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-//
-//                }
-//
-//                @Override
-//                public void onLoadingChanged(boolean isLoading) {
-//
-//                    if(isLoading){
-//                        progressBar.setVisibility(View.VISIBLE);
-//                    }else{
-//
-//                        progressBar.setVisibility(GONE);
-//                    }
-//                }
-//
-//                @Override
-//                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-//                    switch (playbackState) {
-//
-//                        case Player.STATE_BUFFERING:
-//
-//                            if (progressBar != null) {
-//                                progressBar.setVisibility(View.VISIBLE);
-//                            }
-//
-//                            break;
-//                        case Player.STATE_ENDED:
-//                            Log.d("TAG", "onPlayerStateChanged: Video ended.");
-//                            exoPlayer.seekTo(0);
-//                            break;
-//                        case Player.STATE_IDLE:
-//
-//                            break;
-//                        case Player.STATE_READY:
-//                            Log.e("TAG", "onPlayerStateChanged: Ready to play.");
-//                            if (progressBar != null) {
-//                                img_cover.setVisibility(GONE);
-//                                progressBar.setVisibility(GONE);
-//                            }
-////                                if(!isVideoViewAdded){
-////                                    addVideoView();
-////                                }
-//                            break;
-//                        default:
-//                            break;
-//                    }
-//                }
-//
-//                @Override
-//                public void onRepeatModeChanged(int repeatMode) {
-//
-//                }
-//
-//                @Override
-//                public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-//
-//                }
-//
-//                @Override
-//                public void onPlayerError(ExoPlaybackException error) {
-//
-//                }
-//
-//                @Override
-//                public void onPositionDiscontinuity(int reason) {
-//
-//                }
-//
-//                @Override
-//                public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-//
-//                }
-//
-//                @Override
-//                public void onSeekProcessed() {
-//
-//                }
-//            });
-//
-//
-//
-//
-//
-//
-//
-//
-//        });
+        if(position != LASTPOSITION){
+
+            if(exoPlayer!=null){
+                exoPlayer.pause();
+            }
+
+        }else{
+            Log.i("TAG", "bindData: ");
+        }
+
+
     }
 
     public void setOnVideoItemHolderListener(VideoItemInteraction listener, String url, Context context, int position) {
 
         root.setOnClickListener(view -> {
 
-
-
+            LASTPOSITION = position;
+            listener.notifyDataSetChanged();
 
             exoPlayer = ExoPlayerFactory.newSimpleInstance(itemView.getContext());
 
@@ -241,6 +135,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                             break;
                         case Player.STATE_ENDED:
                             Log.d("TAG", "onPlayerStateChanged: Video ended.");
+
 //                            exoPlayer.seekTo(0);
 //                            exoPlayer.release();
 
@@ -250,13 +145,15 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                             break;
                         case Player.STATE_READY:
                             Log.e("TAG", "onPlayerStateChanged: Ready to play.");
+
+                            LASTPOSITION = position;
+
+
                             if (progressBar != null) {
                                 img_cover.setVisibility(GONE);
                                 progressBar.setVisibility(GONE);
                             }
-//                                if(!isVideoViewAdded){
-//                                    addVideoView();
-//                                }
+
                             break;
                         default:
                             break;

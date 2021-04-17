@@ -13,6 +13,8 @@ public class MainActivity extends AppCompatActivity implements VideoItemInteract
 
     RecyclerView recyclerview;
     VideoAdapter adapter;
+
+    public static Integer LASTPOSITION = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,8 +25,7 @@ public class MainActivity extends AppCompatActivity implements VideoItemInteract
         List<String> list = new ArrayList<>();
         list.add("https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4");
         list.add("https://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4");
-       
-//        list.add("https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4");
+        list.add("https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4");
 //        list.add("https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4");
 //        list.add("https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4");
 //        list.add("https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4");
@@ -32,12 +33,13 @@ public class MainActivity extends AppCompatActivity implements VideoItemInteract
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerview.setLayoutManager(layoutManager);
         adapter = new VideoAdapter(list, this);
-//        adapter.setListener(this);
+        adapter.setListener(this);
         recyclerview.setAdapter(adapter);
     }
 
     @Override
     public void notifyDataSetChanged() {
 
+        adapter.notifyDataSetChanged();
     }
 }
